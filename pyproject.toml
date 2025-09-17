@@ -9,5 +9,5 @@ dependencies = [
 ]
 
 [project.scripts]
-migrate = "migrate.command:cli"
+richorm = "migrate.command:cli"
 
