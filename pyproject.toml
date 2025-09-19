@@ -6,8 +6,9 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "click>=8.2.1",
+    "pyyaml>=6.0.2",
 ]
 
 [project.scripts]
-richorm = "migrate.command:cli"
+richorm = "richorm.migrate.command:cli"
 
