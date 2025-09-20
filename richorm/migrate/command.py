@@ -1,13 +1,15 @@
 # package imports 
+from logging import config
 import click
 import yaml
 import os
 import copy
 
 # local imports 
-from .dataYAML import dumping_data
+from .data_yaml import dumping_data, SQLITE3_DBCONFIG
 from richorm.drivers.sqlite3.reader import ConfigFileReader
-
+from richorm.drivers.sqlite3.utils import _validate_sqlite3_config
+from richorm.drivers.sqlite3.base import BaseDriverWrapper
 
 ALLOWED_DRIVERS = [
                 'mysql', 
@@ -26,13 +28,12 @@ def cli (
         driver:str 
     )   :
      if ctx.invoked_subcommand is None:
-        ALLOWED_DRIVERS_local = copy.deepcopy(ALLOWED_DRIVERS)
-        
-        if driver not in ALLOWED_DRIVERS_local:
+        if driver not in ALLOWED_DRIVERS:
             raise ValueError(
                 "This driver is not configured with richORM"
                 )
-            
+        if driver =="sqlite3":
+            dumping_data["database"] = SQLITE3_DBCONFIG
         dumping_data["database"]["driver"] = f"{driver}"
         current_directory  = os.getcwd()
         config_filename = "richorm-config.yaml"
@@ -57,7 +58,16 @@ def cli (
     
 @cli.command()
 @click.argument('config_path')
-def read(config_path:str):
+def read(
+        config_path:str
+    ):
     _wrapper_instance = ConfigFileReader(config_path)
     config_data = _wrapper_instance.get_connection_params()
+    database_config = config_data['database']
+    db_validation = _validate_sqlite3_config(database_config)
+    if not db_validation:
+        raise ValueError(
+            f'Please check configuration file of ORM for sqlite3.\n Must contain the "name" and "driver" in config of database.  '
+        )
     
+       
