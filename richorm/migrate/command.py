@@ -1,5 +1,6 @@
 # package imports 
 from logging import config
+from pickle import NONE
 import click
 import yaml
 import os
@@ -9,7 +10,7 @@ import copy
 from .data_yaml import dumping_data, SQLITE3_DBCONFIG
 from richorm.drivers.sqlite3.reader import ConfigFileReader
 from richorm.drivers.sqlite3.utils import _validate_sqlite3_config
-from richorm.drivers.sqlite3.base import BaseDriverWrapper
+# from richorm.drivers.sqlite3.base import BaseDriverWrapper
 
 ALLOWED_DRIVERS = [
                 'mysql', 
@@ -17,6 +18,10 @@ ALLOWED_DRIVERS = [
                 'postgresql', 
                 'oracle'
             ]
+class ConnectionObject:
+    CONFIG_DATA = None
+    
+
 
 
 @click.group(invoke_without_command=True)
@@ -69,5 +74,15 @@ def read(
         raise ValueError(
             f'Please check configuration file of ORM for sqlite3.\n Must contain the "name" and "driver" in config of database.  '
         )
-    
+    home_dir = os.path.expanduser("~")
+    CONFIG_DIR = os.path.join(home_dir, '.richorm')
+    CONFIG_FILE = os.path.join(CONFIG_DIR,"config.yaml")
+    os.makedirs(CONFIG_DIR)
+    try:
+        with open(CONFIG_FILE,'w') as richorm_config:
+            yaml.dump(config_data, richorm_config, default_flow_style=False)
+    except IOError as e:
+        print(f"Error writing to destination file '{CONFIG_FILE}': {e}")
+    except yaml.YAMLError as e:
+        print(f"Error dumping data to destination YAML file: {e}")
        
