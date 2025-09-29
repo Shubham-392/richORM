@@ -6,10 +6,12 @@ import yaml
 import os
 import copy
 
+from richorm.drivers.sqlite3.exceptions import ImproperlyConfigured
+
 # local imports 
 from .data_yaml import dumping_data, SQLITE3_DBCONFIG
 from richorm.drivers.sqlite3.reader import ConfigFileReader
-from richorm.drivers.sqlite3.utils import _validate_sqlite3_config
+from richorm.drivers.sqlite3.utils import _prepare_config
 # from richorm.drivers.sqlite3.base import BaseDriverWrapper
 
 ALLOWED_DRIVERS = [
@@ -69,15 +71,17 @@ def read(
     _wrapper_instance = ConfigFileReader(config_path)
     config_data = _wrapper_instance.get_connection_params()
     database_config = config_data['database']
-    db_validation = _validate_sqlite3_config(database_config)
-    if not db_validation:
-        raise ValueError(
-            f'Please check configuration file of ORM for sqlite3.\n Must contain the "name" and "driver" in config of database.  '
+    missing_params = _prepare_config(database_config)
+    
+    if len(missing_params) != 0:
+        raise ImproperlyConfigured(
+            f"{','.join(missing_params)} is/are missing from SQLite3 database configuration."
         )
+    
     home_dir = os.path.expanduser("~")
     CONFIG_DIR = os.path.join(home_dir, '.richorm')
     CONFIG_FILE = os.path.join(CONFIG_DIR,"config.yaml")
-    os.makedirs(CONFIG_DIR)
+    os.makedirs(CONFIG_DIR,exist_ok=True)
     try:
         with open(CONFIG_FILE,'w') as richorm_config:
             yaml.dump(config_data, richorm_config, default_flow_style=False)
@@ -85,4 +89,3 @@ def read(
         print(f"Error writing to destination file '{CONFIG_FILE}': {e}")
     except yaml.YAMLError as e:
         print(f"Error dumping data to destination YAML file: {e}")
-       
