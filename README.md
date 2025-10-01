@@ -15,7 +15,13 @@ It demonstrates advanced Python concepts such as **metaclasses**, **descriptors*
 - Metaclass-based model registration (`BaseModel`)
 - Descriptor protocol for attribute management (`__get__`, `__set__`)
 - CLI integration with [`uv`](https://docs.astral.sh/uv/)
-
+  
+- **CLI Layer**
+  - Built with [Click](https://click.palletsprojects.com/)
+  - Generates project-level config files in YAML
+  - Supports multiple database backends: `sqlite3`, `mysql`, `postgresql`, `oracle`
+  - Stores final configuration in a hidden directory (`~/.richorm/config.yaml`)
+  - Validation of driver parameters with helpful error messages
 ---
 
 ## 🚀 Installation
@@ -26,3 +32,15 @@ Clone the repository and install in **editable mode** with [`uv`](https://docs.a
 git clone https://github.com/<your-username>/richorm.git
 cd richorm
 uv tool install --editable .
+
+
+Usage: richorm [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  -d, --driver TEXT  Driver for ORM (default: sqlite3)
+  --version          Show the version and exit.
+  --help             Show this message and exit.
+
+Commands:
+  read  Read and validate a configuration file
+
