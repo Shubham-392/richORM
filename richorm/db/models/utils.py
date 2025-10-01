@@ -6,4 +6,4 @@ def default_str(owner):
             attr_list.append(f'{key}={value}')
             
     attrs_str = ','.join(attr_list)
-    return f'sORM_{class_name}:({attrs_str})'
+    return f'richORM_{class_name}:({attrs_str})'
