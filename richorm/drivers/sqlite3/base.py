@@ -29,13 +29,8 @@ class ConnectionLayer:
         return None
     
     def check_settings(self):
-        
-        # if False:
-        #     pass
-        # # raise ImproperlyConfigured(
-        # #     "thic setting is imporperly configured. Please Check in config file."
-        # # )
         pass
 
 
-      
+connections = ConnectionLayer()  
+connections.connect()
