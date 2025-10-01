@@ -52,4 +52,6 @@ Arguments:
 Options:
   --help  Show this message and exit.
 
+```
+<p style="color:red;"><b>⚠️ This is a learning project. It is not intended to replace existing ORMs like Django ORM or SQLAlchemy.</b></p>
 
