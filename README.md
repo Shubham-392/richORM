@@ -44,3 +44,12 @@ Options:
 Commands:
   read  Read and validate a configuration file
 
+Usage: richorm read [OPTIONS] CONFIG_PATH
+
+Arguments:
+  CONFIG_PATH  Path to the richorm configuration YAML file.
+
+Options:
+  --help  Show this message and exit.
+
+
