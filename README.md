@@ -29,7 +29,7 @@ It demonstrates advanced Python concepts such as **metaclasses**, **descriptors*
 Clone the repository and install in **editable mode** with [`uv`](https://docs.astral.sh/uv/):
 
 ```bash
-git clone https://github.com/<your-username>/richorm.git
+git clone https://github.com/Shubham-392/richorm.git
 cd richorm
 uv tool install --editable .
 
